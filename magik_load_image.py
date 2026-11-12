@@ -27,6 +27,19 @@ def input_path(rel):
     return folder_paths.get_annotated_filepath(rel)
 
 
+def input_image_files():
+    input_dir = folder_paths.get_input_directory()
+    if not os.path.isdir(input_dir):
+        return []
+    files = []
+    for dirpath, _subdirs, filenames in os.walk(input_dir):
+        for name in filenames:
+            if os.path.splitext(name)[1].lower() in IMAGE_EXTENSIONS:
+                rel = os.path.relpath(os.path.join(dirpath, name), input_dir)
+                files.append(rel.replace(os.sep, "/"))
+    return sorted(files)
+
+
 def image_info(full_path, rel):
     st = os.stat(full_path)
     with Image.open(full_path) as im:
@@ -149,7 +162,7 @@ class MagikLoadImage:
     def INPUT_TYPES(cls):
         return {
             "required": {
-                "image": (sorted(folder_paths.get_filename_list("input")), {"image_upload": True}),
+                "image": (input_image_files(), {"image_upload": True}),
             }
         }
 
