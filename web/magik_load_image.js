@@ -42,6 +42,20 @@ function fmtSize(n) {
   return (n / 1024 / 1024).toFixed(1) + " MB";
 }
 
+function gcd(a, b) {
+  return b ? gcd(b, a % b) : a;
+}
+
+function ratioText(w, h) {
+  const d = gcd(w, h) || 1;
+  return `${w / d}:${h / d}`;
+}
+
+function aspectBoxSize(w, h, maxW, maxH) {
+  const s = Math.min(maxW / w, maxH / h);
+  return [Math.max(1, Math.round(w * s)), Math.max(1, Math.round(h * s))];
+}
+
 function getState(node) {
   const p = (node.properties ??= {});
   const defaults = {
@@ -331,6 +345,12 @@ function buildBrowser(node) {
       };
       el("span", "magik-res", tw, `${im.width} × ${im.height}`);
       if (im.has_alpha) el("span", "magik-alpha", tw, "α");
+      const ar = el("span", "magik-ar", tw);
+      ar.title = `${ratioText(im.width, im.height)} (${im.width}×${im.height})`;
+      const arBox = el("i", "magik-ar-box", ar);
+      const [arW, arH] = aspectBoxSize(im.width, im.height, 22, 14);
+      arBox.style.width = arW + "px";
+      arBox.style.height = arH + "px";
       el("span", "magik-name", cell, im.name);
       cell.title = `${im.name} — ${im.width}×${im.height}, ${im.format}, ${fmtSize(im.size)}`;
       cell.addEventListener("click", (e) => {

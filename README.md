@@ -13,8 +13,9 @@ browser UI built into the node itself.
 ## UI features
 
 - Thumbnail grid (S/M/L) and list view, each thumbnail showing a
-  **resolution overlay** (`1920 × 1080`) and an `α` badge for images with an
-  alpha channel
+  **resolution overlay** (`1920 × 1080`), an **aspect-ratio cue** (a mini
+  rectangle matching the image's proportions, tooltip with the reduced ratio
+  like `16:9`), and an `α` badge for images with an alpha channel
 - Subfolder navigation with breadcrumbs and a **recently used folders** list
   (stored in `localStorage`, most-recent-first, max 8)
 - Search, alpha filter, and sorting (name / date / size / resolution)
